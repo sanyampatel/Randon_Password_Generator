@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Password Generator</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      min-height: 100vh; /* ✅ FIX (was 100vh) */
+      padding: 20px; /* ✅ mobile spacing */
+    }
+
+    .container {
+      background: white;
+      padding: 40px;
+      width: 100%;
+      max-width: 500px;
+      border-radius: 15px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+      text-align: center;
+    }
+
+    h1 {
+      margin-bottom: 20px;
+      color: #333;
+    }
+
+    label {
+      display: block;
+      margin-top: 15px;
+      font-weight: bold;
+    }
+
+    input[type="range"] {
+      width: 100%;
+    }
+
+    .options {
+      text-align: left;
+      margin-top: 10px;
+    }
+
+    .options label {
+      font-weight: normal;
+    }
+
+    button {
+      width: 100%;
+      padding: 15px;
+      margin-top: 15px;
+      border: none;
+      border-radius: 8px;
+      background: #667eea;
+      color: white;
+      font-size: 16px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    button:hover {
+      background: #5a67d8;
+    }
+
+    input[type="text"] {
+      width: 100%;
+      padding: 15px;
+      margin-top: 15px;
+      font-size: 16px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+    }
+
+    .back {
+      background: #e53e3e;
+    }
+
+    .back:hover {
+      background: #c53030;
+    }
+
+    /* ========================= */
+    /* 📱 MOBILE RESPONSIVE */
+    /* ========================= */
+
+    @media (max-width: 768px) {
+
+      .container {
+        padding: 25px;
+      }
+
+      h1 {
+        font-size: 22px;
+      }
+
+      button {
+        padding: 12px;
+        font-size: 15px;
+      }
+
+      input[type="text"] {
+        padding: 12px;
+        font-size: 15px;
+      }
+
+    }
+
+    @media (max-width: 480px) {
+
+      body {
+        padding: 10px;
+      }
+
+      .container {
+        padding: 20px;
+      }
+
+      h1 {
+        font-size: 20px;
+      }
+
+      label {
+        font-size: 14px;
+      }
+
+    }
+
+  </style>
+</head>
+
+<body>
+
+<div class="container">
+
+  <h1>🔐 Password Generator</h1>
+
+  <label>Password Length: <span id="lengthValue">12</span></label>
+  <input type="range" id="length" min="8" max="32" value="12">
+
+  <div class="options">
+    <label><input type="checkbox" id="upper" checked> Uppercase</label>
+    <label><input type="checkbox" id="lower" checked> Lowercase</label>
+    <label><input type="checkbox" id="numbers" checked> Numbers</label>
+    <label><input type="checkbox" id="symbols" checked> Symbols</label>
+  </div>
+
+  <button onclick="generatePassword()">Generate Password</button>
+
+  <input type="text" id="generatedPassword" placeholder="Your password..." readonly>
+
+  <button onclick="copyPassword()">Copy Password</button>
+
+  <button class="back" onclick="goBack()">⬅ Back</button>
+
+</div>
+
+<script>
+
+document.getElementById("length").addEventListener("input", function() {
+  document.getElementById("lengthValue").innerText = this.value;
+});
+
+function generatePassword() {
+  const length = document.getElementById("length").value;
+  const upper = document.getElementById("upper").checked;
+  const lower = document.getElementById("lower").checked;
+  const numbers = document.getElementById("numbers").checked;
+  const symbols = document.getElementById("symbols").checked;
+
+  let chars = "";
+  if (upper) chars += "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+  if (lower) chars += "abcdefghijklmnopqrstuvwxyz";
+  if (numbers) chars += "0123456789";
+  if (symbols) chars += "!@#$%^&*()_+";
+
+  if (chars === "") {
+    alert("Select at least one option!");
+    return;
+  }
+
+  let password = "";
+  let randomValues = new Uint32Array(length);
+  crypto.getRandomValues(randomValues);
+
+  for (let i = 0; i < length; i++) {
+    password += chars[randomValues[i] % chars.length];
+  }
+
+  document.getElementById("generatedPassword").value = password;
+}
+
+function copyPassword() {
+  let pass = document.getElementById("generatedPassword");
+  pass.select();
+  document.execCommand("copy");
+  alert("Copied!");
+}
+
+function goBack() {
+  window.location.href = "index.html";
+}
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Password Strength Checker</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      min-height: 100vh; /* ✅ FIX */
+      padding: 20px; /* ✅ mobile spacing */
+    }
+
+    .container {
+      background: white;
+      padding: 40px;
+      width: 100%;
+      max-width: 500px;
+      border-radius: 15px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+      text-align: center;
+    }
+
+    h1 {
+      margin-bottom: 20px;
+      color: #333;
+    }
+
+    input {
+      width: 100%;
+      padding: 15px;
+      font-size: 16px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+    }
+
+    .meter {
+      height: 12px;
+      background: #eee;
+      margin-top: 15px;
+      border-radius: 10px;
+      overflow: hidden;
+    }
+
+    #strengthBar {
+      height: 12px;
+      width: 0%;
+      transition: 0.3s;
+    }
+
+    #strengthText {
+      margin-top: 10px;
+      font-weight: bold;
+    }
+
+    #crackTime {
+      margin-top: 10px;
+      font-size: 15px;
+      color: #333;
+    }
+
+    ul {
+      text-align: left;
+      margin-top: 15px;
+      color: red;
+    }
+
+    button {
+      margin-top: 15px;
+      padding: 14px;
+      width: 100%;
+      background: #667eea;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+    }
+
+    /* ========================= */
+    /* 📱 MOBILE RESPONSIVE */
+    /* ========================= */
+
+    @media (max-width: 768px) {
+
+      .container {
+        padding: 25px;
+      }
+
+      h1 {
+        font-size: 22px;
+      }
+
+      input {
+        padding: 12px;
+        font-size: 15px;
+      }
+
+      button {
+        padding: 12px;
+        font-size: 15px;
+      }
+
+      #crackTime {
+        font-size: 14px;
+      }
+
+    }
+
+    @media (max-width: 480px) {
+
+      body {
+        padding: 10px;
+      }
+
+      .container {
+        padding: 20px;
+      }
+
+      h1 {
+        font-size: 20px;
+      }
+
+      ul {
+        font-size: 14px;
+      }
+
+    }
+
+  </style>
+</head>
+
+<body>
+
+<div class="container">
+
+  <h1>🛡️ Password Strength Checker</h1>
+
+  <input type="password" id="passwordInput" placeholder="Enter password">
+
+  <div class="meter">
+    <div id="strengthBar"></div>
+  </div>
+
+  <div id="strengthText"></div>
+  <div id="crackTime"></div>
+
+  <ul id="suggestions"></ul>
+
+  <button onclick="goBack()">⬅ Back</button>
+
+</div>
+
+<script>
+
+const input = document.getElementById("passwordInput");
+const bar = document.getElementById("strengthBar");
+const text = document.getElementById("strengthText");
+const suggestions = document.getElementById("suggestions");
+const crackTimeText = document.getElementById("crackTime");
+
+input.addEventListener("input", checkStrength);
+
+function checkStrength() {
+  let password = input.value;
+  let score = 0;
+  let feedback = [];
+
+  if (password.length >= 8) score++;
+  else feedback.push("Use at least 8 characters");
+
+  if (/[A-Z]/.test(password)) score++;
+  else feedback.push("Add uppercase letters");
+
+  if (/[a-z]/.test(password)) score++;
+  else feedback.push("Add lowercase letters");
+
+  if (/[0-9]/.test(password)) score++;
+  else feedback.push("Include numbers");
+
+  if (/[^A-Za-z0-9]/.test(password)) score++;
+  else feedback.push("Add special characters");
+
+  let charset = 0;
+  if (/[a-z]/.test(password)) charset += 26;
+  if (/[A-Z]/.test(password)) charset += 26;
+  if (/[0-9]/.test(password)) charset += 10;
+  if (/[^A-Za-z0-9]/.test(password)) charset += 32;
+
+  let entropy = password.length * Math.log2(charset || 1);
+
+  if (entropy > 50) score++;
+
+  let width = (score / 6) * 100;
+  bar.style.width = width + "%";
+
+  if (score <= 2) {
+    bar.style.background = "red";
+    text.innerText = "Weak ❌";
+  } else if (score <= 4) {
+    bar.style.background = "orange";
+    text.innerText = "Medium ⚠️";
+  } else {
+    bar.style.background = "green";
+    text.innerText = "Strong ✅";
+  }
+
+  let guessesPerSecond = 1e9;
+  let combinations = Math.pow(charset || 1, password.length);
+  let seconds = combinations / guessesPerSecond;
+
+  crackTimeText.innerText = "Time to crack: " + formatTime(seconds);
+
+  suggestions.innerHTML = feedback.map(f => `<li>${f}</li>`).join("");
+}
+
+function formatTime(seconds) {
+  if (seconds < 60) return Math.round(seconds) + " seconds";
+  if (seconds < 3600) return Math.round(seconds/60) + " minutes";
+  if (seconds < 86400) return Math.round(seconds/3600) + " hours";
+  if (seconds < 31536000) return Math.round(seconds/86400) + " days";
+  if (seconds < 3153600000) return Math.round(seconds/31536000) + " years";
+  return "Millions of years 🔥";
+}
+
+function goBack() {
+  window.location.href = "index.html";
+}
+
+</script>
+
+</body>
+</html>

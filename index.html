@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Cyber Password Tool</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <!-- CSS Link -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="container">
+
+  <h1>⚡SafeX</h1>
+  <p class="subtitle">
+    Generate strong passwords or check your password security
+  </p>
+
+  <div class="card-container">
+
+    <!-- Generator -->
+    <div class="card" onclick="go('generator')">
+      <h2>🔑 Password Generator</h2>
+      <p>Create strong, secure passwords instantly</p>
+      <button>Open</button>
+    </div>
+
+    <!-- Checker -->
+    <div class="card" onclick="go('checker')">
+      <h2>🛡️ Strength Checker</h2>
+      <p>Analyze password strength and improve security</p>
+      <button>Open</button>
+    </div>
+
+  </div>
+
+</div>
+
+<script>
+function go(page) {
+  if (page === "generator") {
+    window.location.href = "generator.html";
+  } else {
+    window.location.href = "checker.html";
+  }
+}
+</script>
+
+</body>
+</html>

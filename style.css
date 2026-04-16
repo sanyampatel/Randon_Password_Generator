@@ -1,0 +1,142 @@
+body {
+  margin: 0;
+  font-family: 'Segoe UI', sans-serif;
+  background: linear-gradient(135deg, #0f172a, #1e293b);
+  color: white;
+}
+
+/* Container */
+.container {
+  text-align: center;
+  padding: 60px 20px;
+}
+
+/* Title */
+h1 {
+  font-size: 32px;
+  margin-bottom: 10px;
+}
+
+/* Subtitle */
+.subtitle {
+  color: #94a3b8;
+  margin-bottom: 40px;
+  font-size: 16px;
+}
+
+/* Cards */
+.card-container {
+  display: flex;
+  gap: 25px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+/* ✅ FIX: responsive width */
+.card {
+  background: rgba(255,255,255,0.05);
+  padding: 30px;
+  width: 100%;
+  max-width: 300px; /* instead of fixed 280px */
+  border-radius: 15px;
+  backdrop-filter: blur(10px);
+  cursor: pointer;
+  transition: 0.3s;
+  border: 1px solid rgba(255,255,255,0.1);
+}
+
+.card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+}
+
+/* Card text */
+.card h2 {
+  margin-bottom: 10px;
+}
+
+.card p {
+  font-size: 14px;
+  color: #cbd5f5;
+}
+
+/* Button */
+.card button {
+  margin-top: 15px;
+  padding: 12px;
+  width: 100%;
+  border: none;
+  border-radius: 8px;
+  background: #3b82f6;
+  color: white;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.card button:hover {
+  background: #2563eb;
+}
+
+/* Hover glow */
+.card:nth-child(1):hover {
+  box-shadow: 0 0 20px rgba(34,197,94,0.6);
+}
+
+.card:nth-child(2):hover {
+  box-shadow: 0 0 20px rgba(239,68,68,0.6);
+}
+
+/* ========================= */
+/* 📱 MOBILE RESPONSIVE */
+/* ========================= */
+
+@media (max-width: 768px) {
+
+  .container {
+    padding: 40px 15px;
+  }
+
+  h1 {
+    font-size: 24px;
+  }
+
+  .subtitle {
+    font-size: 14px;
+  }
+
+  .card-container {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .card {
+    width: 90%;
+    padding: 20px;
+  }
+
+  .card h2 {
+    font-size: 18px;
+  }
+
+  .card p {
+    font-size: 13px;
+  }
+
+  .card button {
+    padding: 10px;
+    font-size: 14px;
+  }
+}
+
+/* 📱 Small phones */
+@media (max-width: 480px) {
+
+  h1 {
+    font-size: 20px;
+  }
+
+  .container {
+    padding: 30px 10px;
+  }
+
+}
